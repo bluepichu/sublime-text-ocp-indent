@@ -54,9 +54,9 @@ class OcpIndentLinesOnInsert(sublime_plugin.TextCommand):
 		indent_lines(self.view, edit, lines)
 
 		# update selections - after typing a character, they should be empty
-		selection_regions = [sublime.Region(region.b, region.b) for region in view.sel()]
-		view.sel().clear()
-		view.sel().add_all(selection_regions)
+		selection_regions = [sublime.Region(region.b, region.b) for region in self.view.sel()]
+		self.view.sel().clear()
+		self.view.sel().add_all(selection_regions)
 
 class OcpIndentSelection(sublime_plugin.TextCommand):
 	def run(self, edit):
