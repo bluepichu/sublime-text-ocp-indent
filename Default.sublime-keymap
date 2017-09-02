@@ -35,4 +35,15 @@
 			}
 		]
 	},
+	{
+		"keys": ["tab"],
+		"command": "ocp_indent_selection",
+		"context": [
+			{
+				"key": "selector",
+				"operator": "equal",
+				"operand": "source.ocaml"
+			}
+		]
+	}
 ]
