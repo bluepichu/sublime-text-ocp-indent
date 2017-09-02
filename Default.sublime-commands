@@ -1,0 +1,10 @@
+[
+    {
+        "caption": "ocp-indent: Indent selection",
+        "command": "ocp_indent_selection"
+    },
+    {
+        "caption": "ocp-indent: Indent file",
+        "command": "ocp_indent_file"
+    },
+]

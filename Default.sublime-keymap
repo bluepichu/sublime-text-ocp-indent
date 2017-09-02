@@ -1,0 +1,38 @@
+[
+	{
+		"keys": ["|"],
+		"command": "ocp_indent_lines",
+		"args": { "key": "|" },
+		"context": [
+			{
+				"key": "selector",
+				"operator": "equal",
+				"operand": "source.ocaml"
+			}
+		]
+	},
+	{
+		"keys": ["enter"],
+		"command": "ocp_indent_lines",
+		"args": { "key": "\n" },
+		"context": [
+			{
+				"key": "selector",
+				"operator": "equal",
+				"operand": "source.ocaml"
+			}
+		]
+	},
+	{
+		"keys": [";"],
+		"command": "ocp_indent_lines",
+		"args": { "key": ";" },
+		"context": [
+			{
+				"key": "selector",
+				"operator": "equal",
+				"operand": "source.ocaml"
+			}
+		]
+	},
+]
