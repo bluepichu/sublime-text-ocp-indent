@@ -1,4 +1,4 @@
-# sublime-ocp-indent
+# sublime-text-ocp-indent
 
 Sublime Text 3 plugin for ocp-indent.
 
