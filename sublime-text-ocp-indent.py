@@ -69,3 +69,8 @@ class OcpIndentFile(sublime_plugin.TextCommand):
 	def run(self, edit):
 		# indent all lines
 		indent_lines(self.view, edit, [line for line in range(0, self.view.rowcol(self.view.size())[0] + 1)])
+
+class OcpIndentEventListener(sublime_plugin.EventListener):
+	def on_pre_save(self, view):
+		if is_ocaml(view):
+			view.run_command("ocp_indent_file")
