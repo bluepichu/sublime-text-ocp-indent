@@ -14,13 +14,18 @@ import subprocess
 def is_ocaml(view):
 	return view.match_selector(view.sel()[0].begin(), "source.ocaml")
 
-def indent_lines(view, edit, lines):
+def indent_lines(view, edit, lines, indent_empty = True):
 	if not is_ocaml(view):
 		return
 
+	command = ["ocp-indent", "--numeric"]
+
+	if indent_empty:
+		command.append("--indent-empty")
+
 	# get the proper indentation from ocp-indent
 	process = subprocess.Popen(
-		["ocp-indent", "--numeric", "--indent-empty"],
+		command,
 		stdin = subprocess.PIPE,
 		stdout = subprocess.PIPE,
 		stderr = subprocess.PIPE,
@@ -71,9 +76,9 @@ class OcpIndentSelection(sublime_plugin.TextCommand):
 		indent_lines(self.view, edit, lines)
 
 class OcpIndentFile(sublime_plugin.TextCommand):
-	def run(self, edit):
+	def run(self, edit, indent_empty = True):
 		# indent all lines
-		indent_lines(self.view, edit, [line for line in range(0, self.view.rowcol(self.view.size())[0] + 1)])
+		indent_lines(self.view, edit, [line for line in range(0, self.view.rowcol(self.view.size())[0] + 1)], indent_empty = indent_empty)
 
 class OcpIndentEventListener(sublime_plugin.EventListener):
 	lines = 0
@@ -85,7 +90,6 @@ class OcpIndentEventListener(sublime_plugin.EventListener):
 			lines = len(view.substr(sublime.Region(0, view.size())).split("\n")) + 1
 
 			if lines != self.lines:
-				print(lines, self.lines)
 				self.lines = lines
 				view.run_command("ocp_indent_file")
 				update_selection_regions(view)
@@ -93,4 +97,4 @@ class OcpIndentEventListener(sublime_plugin.EventListener):
 
 	def on_pre_save(self, view):
 		if is_ocaml(view):
-			view.run_command("ocp_indent_file")
+			view.run_command("ocp_indent_file", { "indent_empty": False })
