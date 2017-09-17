@@ -40,8 +40,15 @@ def indent_lines(view, edit, lines):
 		new_current_line_content = (" " * result[line]) + current_line_content.lstrip(" ")
 		view.replace(edit, current_line, new_current_line_content)
 
+def update_selection_regions(view):
+	selection_regions = [sublime.Region(region.b, region.b) for region in view.sel()]
+	view.sel().clear()
+	view.sel().add_all(selection_regions)
+
 class OcpIndentLinesOnInsert(sublime_plugin.TextCommand):
 	def run(self, edit, key):
+		print("indenting on insert")
+
 		# disable sublime's autoindent to prevent double-indenting
 		self.view.settings().set("auto_indent", False)
 
@@ -54,9 +61,7 @@ class OcpIndentLinesOnInsert(sublime_plugin.TextCommand):
 		indent_lines(self.view, edit, lines)
 
 		# update selections - after typing a character, they should be empty
-		selection_regions = [sublime.Region(region.b, region.b) for region in self.view.sel()]
-		self.view.sel().clear()
-		self.view.sel().add_all(selection_regions)
+		update_selection_regions(self.view)
 
 class OcpIndentSelection(sublime_plugin.TextCommand):
 	def run(self, edit):
@@ -71,6 +76,21 @@ class OcpIndentFile(sublime_plugin.TextCommand):
 		indent_lines(self.view, edit, [line for line in range(0, self.view.rowcol(self.view.size())[0] + 1)])
 
 class OcpIndentEventListener(sublime_plugin.EventListener):
+	lines = 0
+	rewriting = False
+
+	def on_modified(self, view):
+		if is_ocaml(view) and not self.rewriting:
+			self.rewriting = True
+			lines = len(view.substr(sublime.Region(0, view.size())).split("\n")) + 1
+
+			if lines != self.lines:
+				print(lines, self.lines)
+				self.lines = lines
+				view.run_command("ocp_indent_file")
+				update_selection_regions(view)
+		self.rewriting = False
+
 	def on_pre_save(self, view):
 		if is_ocaml(view):
 			view.run_command("ocp_indent_file")

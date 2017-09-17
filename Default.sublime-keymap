@@ -12,18 +12,6 @@
 		]
 	},
 	{
-		"keys": ["enter"],
-		"command": "ocp_indent_lines_on_insert",
-		"args": { "key": "\n" },
-		"context": [
-			{
-				"key": "selector",
-				"operator": "equal",
-				"operand": "source.ocaml"
-			}
-		]
-	},
-	{
 		"keys": [";"],
 		"command": "ocp_indent_lines_on_insert",
 		"args": { "key": ";" },
