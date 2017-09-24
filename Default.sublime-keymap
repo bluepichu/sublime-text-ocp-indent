@@ -1,37 +1,58 @@
 [
 	{
 		"keys": ["|"],
-		"command": "ocp_indent_lines_on_insert",
-		"args": { "key": "|" },
+		"command": "ocp_indent_placeholder",
 		"context": [
 			{
 				"key": "selector",
 				"operator": "equal",
 				"operand": "source.ocaml"
+			},
+			{
+				"key": "ocp_indent_on_insert"
 			}
 		]
 	},
 	{
 		"keys": [";"],
-		"command": "ocp_indent_lines_on_insert",
-		"args": { "key": ";" },
+		"command": "ocp_indent_placeholder",
 		"context": [
 			{
 				"key": "selector",
 				"operator": "equal",
 				"operand": "source.ocaml"
+			},
+			{
+				"key": "ocp_indent_on_insert"
 			}
 		]
 	},
 	{
 		"keys": ["tab"],
-		"command": "ocp_indent_selection",
+		"command": "ocp_indent_placeholder",
 		"context": [
 			{
 				"key": "selector",
 				"operator": "equal",
 				"operand": "source.ocaml"
+			},
+			{
+				"key": "ocp_indent_on_insert"
 			}
 		]
-	}
+	},
+	{
+		"keys": ["enter"],
+		"command": "ocp_indent_placeholder",
+		"context": [
+			{
+				"key": "selector",
+				"operator": "equal",
+				"operand": "source.ocaml"
+			},
+			{
+				"key": "ocp_indent_on_insert"
+			}
+		]
+	},
 ]
