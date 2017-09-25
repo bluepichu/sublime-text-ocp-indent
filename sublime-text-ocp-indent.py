@@ -11,6 +11,11 @@ import os
 import sys
 import subprocess
 
+def plugin_loaded():
+	global reindent_on_tab
+	settings = sublime.load_settings("OcpIndent.sublime-settings")
+	reindent_on_tab = settings.get("reindent_on_tab")
+
 def is_ocaml(view):
 	return view.match_selector(view.sel()[0].begin(), "source.ocaml")
 
@@ -88,4 +93,10 @@ class OcpIndentEventListener(sublime_plugin.EventListener):
 	def on_query_context(self, view, key, operator, operand, match_all):
 		if key == "ocp_indent_on_insert":
 			self.waiting_for_modify = True
-		return False
+			return None
+
+		if key == "ocp_reindent_selection":
+			global reindent_on_tab
+			return reindent_on_tab
+
+		return None
