@@ -93,7 +93,7 @@ class OcpIndentEventListener(sublime_plugin.EventListener):
 	def on_query_context(self, view, key, operator, operand, match_all):
 		if key == "ocp_indent_on_insert":
 			self.waiting_for_modify = True
-			return None
+			return False
 
 		if key == "ocp_reindent_selection":
 			global reindent_on_tab
