@@ -1,5 +1,5 @@
 {
 	"reindent_on_tab": true,
 	"reindent_on_save": true,
-	"opam_switch":"system",
+	"opam_switch":null,
 }

@@ -35,13 +35,20 @@ def indent_lines(view, edit, lines, indent_empty = True):
 		command.append("--indent-empty")
 
 	# get the proper indentation from ocp-indent
+	cmd_env = os.environ.copy()
+
+	if opam_switch is not None:
+		cmd_env["PATH"] = \
+			os.path.join(cmd_env["HOME"], ".opam", opam_switch, "bin") + \
+			os.pathsep + cmd_env["PATH"]
+
 	process = subprocess.Popen(
 		command,
 		stdin = subprocess.PIPE,
 		stdout = subprocess.PIPE,
 		stderr = subprocess.PIPE,
 		universal_newlines = True,
-		env = {"PATH":os.getenv("HOME")+"/.opam/"+opam_switch+"/bin/"}
+		env = cmd_env
 	)
 
 	content = view.substr(sublime.Region(0, view.size()))
