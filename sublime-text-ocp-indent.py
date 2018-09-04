@@ -13,8 +13,12 @@ import subprocess
 
 def plugin_loaded():
 	global reindent_on_tab
+	global reindent_on_save
+	global opam_switch
 	settings = sublime.load_settings("OcpIndent.sublime-settings")
 	reindent_on_tab = settings.get("reindent_on_tab")
+	reindent_on_save = settings.get("reindent_on_save")
+	opam_switch = settings.get("opam_switch")
 
 def is_ocaml(view):
 	return view.match_selector(view.sel()[0].begin(), "source.ocaml")
@@ -23,18 +27,28 @@ def indent_lines(view, edit, lines, indent_empty = True):
 	if not is_ocaml(view):
 		return
 
+	global opam_switch
+
 	command = ["ocp-indent", "--numeric"]
 
 	if indent_empty:
 		command.append("--indent-empty")
 
 	# get the proper indentation from ocp-indent
+	cmd_env = os.environ.copy()
+
+	if opam_switch is not None:
+		cmd_env["PATH"] = \
+			os.path.join(cmd_env["HOME"], ".opam", opam_switch, "bin") + \
+			os.pathsep + cmd_env["PATH"]
+
 	process = subprocess.Popen(
 		command,
 		stdin = subprocess.PIPE,
 		stdout = subprocess.PIPE,
 		stderr = subprocess.PIPE,
-		universal_newlines = True
+		universal_newlines = True,
+		env = cmd_env
 	)
 
 	content = view.substr(sublime.Region(0, view.size()))
@@ -82,7 +96,8 @@ class OcpIndentEventListener(sublime_plugin.EventListener):
 	waiting_for_modify = False
 
 	def on_pre_save(self, view):
-		if is_ocaml(view):
+		global reindent_on_save
+		if is_ocaml(view) and reindent_on_save:
 			view.run_command("ocp_indent_file", { "indent_empty": False })
 
 	def on_modified(self, view):
